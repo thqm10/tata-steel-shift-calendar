@@ -1,0 +1,91 @@
+{
+  "title": "Tata Steel ploegendienstkalender",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tata Steel ploegendienstkalender",
+        "description": "Kies je ploegkleur.",
+        "data": {
+          "team": "Ploegkleur"
+        }
+      },
+      "reconfigure": {
+        "title": "Ploegkleur wijzigen",
+        "description": "Kies je ploegkleur.",
+        "data": {
+          "team": "Ploegkleur"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Voor deze ploegkleur is al een rooster toegevoegd.",
+      "reconfigure_successful": "De ploegkleur is bijgewerkt."
+    }
+  },
+  "selector": {
+    "team_color": {
+      "options": {
+        "red": "Rood",
+        "green": "Groen",
+        "blue": "Blauw",
+        "yellow": "Geel",
+        "white": "Wit"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "today_shift": {
+        "name": "Dienst vandaag",
+        "state": {
+          "morning": "Ochtenddienst",
+          "afternoon": "Middagdienst",
+          "night": "Nachtdienst",
+          "off": "Vrij"
+        }
+      },
+      "tomorrow_shift": {
+        "name": "Dienst morgen",
+        "state": {
+          "morning": "Ochtenddienst",
+          "afternoon": "Middagdienst",
+          "night": "Nachtdienst",
+          "off": "Vrij"
+        }
+      },
+      "next_shift": {
+        "name": "Volgende dienst",
+        "state": {
+          "morning": "Ochtenddienst",
+          "afternoon": "Middagdienst",
+          "night": "Nachtdienst"
+        }
+      },
+      "current_shift": {
+        "name": "Huidige dienst",
+        "state": {
+          "morning": "Ochtenddienst",
+          "afternoon": "Middagdienst",
+          "night": "Nachtdienst",
+          "off": "Vrij"
+        }
+      },
+      "next_shift_start": {
+        "name": "Start volgende dienst"
+      }
+    },
+    "binary_sensor": {
+      "working_today": {
+        "name": "Werken vandaag"
+      },
+      "currently_working": {
+        "name": "Aan het werk"
+      }
+    },
+    "calendar": {
+      "calendar": {
+        "name": "Agenda"
+      }
+    }
+  }
+}
