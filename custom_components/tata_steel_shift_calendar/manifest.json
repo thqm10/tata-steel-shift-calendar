@@ -6,9 +6,9 @@
   ],
   "config_flow": true,
   "documentation": "https://github.com/thqm10/tata-steel-shift-calendar",
-  "issue_tracker": "https://github.com/thqm10/tata-steel-shift-calendar/issues",
   "integration_type": "service",
   "iot_class": "calculated",
+  "issue_tracker": "https://github.com/thqm10/tata-steel-shift-calendar/issues",
   "requirements": [],
   "version": "2.1.5"
 }
