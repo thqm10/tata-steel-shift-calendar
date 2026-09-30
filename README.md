@@ -6,90 +6,106 @@ Home Assistant-integratie voor het Tata Steel 5-ploegenrooster. Het rooster word
 
 ## Eigenschappen
 
-- Volledig lokale roosterberekening; internet is niet nodig na installatie.
-- Ploegkleuren: Rood, Groen, Blauw, Geel en Wit.
-- Vaste roostertijdzone `Europe/Amsterdam`, inclusief zomer-/wintertijd.
-- Houdt rekening met nachtdiensten over middernacht.
+- Volledig lokale roosterberekening; internet is na installatie niet nodig voor de roosterberekening.
+- Ondersteunt de ploegkleuren **Rood, Groen, Blauw, Geel en Wit**.
+- Gebruikt de vaste roostertijdzone `Europe/Amsterdam`, inclusief zomer- en wintertijd.
 - Houdt rekening met de gevalideerde februari/maart-correctie in niet-schrikkeljaren.
-- Nederlandse en Engelse UI-vertalingen.
+- Nederlandse en Engelse interface.
 - Eén configuratie per ploegkleur; dubbele roosters worden geblokkeerd.
-- Diagnostiek zonder persoonsnaam, tokens of locatiegegevens.
+- Geschikt voor gebruik in dashboards, agenda's en automatiseringen.
+
+## Vereisten
+
+- Home Assistant **2026.8.0 of nieuwer**
+- HACS is aanbevolen voor installatie en updates, maar niet verplicht.
 
 ## Installatie
 
-### HACS
+### Via HACS
 
 Zolang de integratie nog niet in de standaard HACS-community store is opgenomen:
 
 1. Voeg `https://github.com/thqm10/tata-steel-shift-calendar` in HACS toe als **Aangepaste repository** van het type **Integratie**.
 2. Installeer **Tata Steel ploegendienstkalender** via HACS.
 3. Herstart Home Assistant.
-4. Ga naar **Instellingen → Apparaten & diensten → Integratie toevoegen** en zoek naar **Tata Steel ploegendienstkalender**.
+4. Ga naar **Instellingen → Apparaten & diensten → Integratie toevoegen**.
+5. Zoek naar **Tata Steel ploegendienstkalender** en kies je ploegkleur.
 
-Na opname in de standaard HACS-community store is stap 1 niet meer nodig en kan de integratie direct in HACS worden gezocht.
+Na opname in de standaard HACS-community store is stap 1 niet meer nodig en kan de integratie direct in HACS worden gevonden.
 
 ### Handmatig
 
-Kopieer `custom_components/tata_steel_shift_calendar` naar `/config/custom_components/tata_steel_shift_calendar` en herstart Home Assistant volledig.
+Kopieer:
+
+```text
+custom_components/tata_steel_shift_calendar
+```
+
+naar:
+
+```text
+/config/custom_components/tata_steel_shift_calendar
+```
+
+Herstart daarna Home Assistant.
 
 ## Configuratie
 
-Je kiest alleen je ploegkleur. De config-entry en het apparaat krijgen automatisch een naam als:
+Bij het toevoegen van de integratie kies je alleen je ploegkleur:
 
-`Ploegendienst rooster Rood`
+- Rood
+- Groen
+- Blauw
+- Geel
+- Wit
 
-Er wordt geen persoonsnaam opgeslagen.
+De ploegkleur kan later via **Configureren** worden gewijzigd.
 
 ## Entiteiten
 
 | Entiteit | Betekenis |
 |---|---|
-| Dienst vandaag | Geplande dienst op de huidige kalenderdag |
-| Dienst morgen | Geplande dienst morgen |
-| Huidige dienst | Dienst die op dit exacte moment actief is, anders Vrij/Off |
-| Volgende dienst | Eerstvolgende daadwerkelijke dienst die na nu begint |
-| Start volgende dienst | Timestamp van exact dezelfde eerstvolgende dienst |
-| Werken vandaag | Aan als deze kalenderdag een werkdag is |
-| Aan het werk | Aan als de ploeg op dit exacte moment dienst heeft |
-| Agenda | Home Assistant-kalender met alle berekende diensten |
-
-De technische states zijn taalneutraal (`morning`, `afternoon`, `night`, `off`). Home Assistant vertaalt die in de interface.
+| **Dienst vandaag** | Geplande dienst op de huidige kalenderdag |
+| **Dienst morgen** | Geplande dienst voor morgen |
+| **Huidige dienst** | Dienst die op dit exacte moment actief is, anders Vrij |
+| **Volgende dienst** | Eerstvolgende daadwerkelijke dienst die na nu begint |
+| **Start volgende dienst** | Starttijd van exact dezelfde eerstvolgende dienst |
+| **Werken vandaag** | Aan als deze kalenderdag een werkdag is |
+| **Aan het werk** | Aan als de ploeg op dit exacte moment dienst heeft |
+| **Agenda** | Home Assistant-kalender met alle berekende diensten |
 
 ## Automatiseringen
 
-De entiteiten zijn bewust ingericht voor de visuele Home Assistant automation-editor:
+De entiteiten zijn ingericht voor de visuele Home Assistant automation-editor:
 
-- **Dienst vandaag**, **Dienst morgen** en **Huidige dienst** zijn enum-sensoren met de keuzes **Ochtenddienst**, **Middagdienst**, **Nachtdienst** en **Vrij**.
-- **Volgende dienst** is een enum-sensor met alleen **Ochtenddienst**, **Middagdienst** en **Nachtdienst**.
-- **Werken vandaag** en **Aan het werk** zijn binary sensors en kunnen direct als Aan/Uit-trigger of -voorwaarde worden gebruikt.
-- **Start volgende dienst** is een timestamp-sensor. Gebruik die in een **Tijd**-trigger om exact bij de volgende dienst te starten; Home Assistant ondersteunt daar ook een offset voor.
-- **Agenda** is een calendar entity en kan met een kalendertrigger reageren op het begin of einde van een dienst.
+- **Dienst vandaag**, **Dienst morgen** en **Huidige dienst** hebben de keuzes **Ochtenddienst**, **Middagdienst**, **Nachtdienst** en **Vrij**.
+- **Volgende dienst** heeft de keuzes **Ochtenddienst**, **Middagdienst** en **Nachtdienst**.
+- **Werken vandaag** en **Aan het werk** zijn Aan/Uit-entiteiten en kunnen direct als trigger of voorwaarde worden gebruikt.
+- **Start volgende dienst** is een timestamp-sensor en kan als tijdtrigger worden gebruikt, inclusief een offset.
+- **Agenda** kan worden gebruikt met Home Assistant-kalendertriggers voor het begin of einde van een dienst.
 
-De normale entities bevatten geen technische roosterattributen meer. Detailinformatie voor foutanalyse blijft beschikbaar via Home Assistant Diagnostics. Hierdoor blijft de automation-editor overzichtelijk.
-
-## Validatie
-
-De standaardcyclus is vergeleken met het aangeleverde `Shifts.ics` over 30 maart 2026 t/m 2 augustus 2027: 491 kalenderdagen en 1.473 diensten zonder roosterafwijking. De regressietests bewaken daarnaast de februari/maart-correctie, schrikkeldag-doorloop, jaarwisseling, nachtdiensten, DST en kalender-overlap.
-
-De aangeleverde referentie bevat geen 29 februari 2028. De schrikkeljaarlogica is daarom wel regressie-getest, maar niet extern tegen een 2028-export gevalideerd.
-
-## Migratie vanaf de oude testversie
-
-Versie 2.1.5 hernoemt de kalenderentity zichtbaar naar **Agenda** en gebruikt voor nieuwe installaties `..._agenda` als entity-ID. Pre-release entity-ID's die eindigen op `_rooster` of `_roster` worden bij het laden automatisch naar `_agenda` gemigreerd zolang de doel-ID nog vrij is.
-
-Versie 2.1.4 verwijdert de tijdelijke publieke roosterattributen uit de entities. Voor normale automations gebruik je voortaan de entity-state zelf, de twee binary sensors, de timestamp-sensor of de kalender. Dit is de definitieve automation-interface vóór de publieke release.
-
-Versie 2.0.0 gebruikt de definitieve domainnaam `tata_steel_shift_calendar` in plaats van `work_shift_calendar`. Home Assistant kan config entries niet automatisch tussen domains verplaatsen. Verwijder daarom de oude testintegratie, verwijder de oude map `custom_components/work_shift_calendar`, herstart Home Assistant en installeer daarna deze versie opnieuw.
+Voor normale automatiseringen hoef je geen technische attributen te gebruiken.
 
 ## Ondersteuning
 
-Meld problemen via de [GitHub issue tracker](https://github.com/thqm10/tata-steel-shift-calendar/issues). Voeg bij problemen waar mogelijk Home Assistant Diagnostics toe; daarin worden geen persoonsnamen opgeslagen.
+Problemen of fouten kunnen worden gemeld via:
 
-## Generatiepact
+`https://github.com/thqm10/tata-steel-shift-calendar/issues`
 
-GP1 en GP2 zijn bewust nog niet opgenomen. Die worden pas toegevoegd nadat hun referentieroosters op dezelfde manier volledig zijn gevalideerd.
+Voeg bij een probleem waar mogelijk Home Assistant Diagnostics toe.
 
+## Beperkingen
+
+- De integratie berekent het standaard Tata Steel 5-ploegenrooster.
+- Verlof, overwerk en geruilde diensten worden niet automatisch verwerkt.
+- De integratie maakt geen verbinding met een Tata Steel-account of interne Tata Steel-systemen.
 
 ## Broncode en releases
 
-De broncode en releases staan op [GitHub](https://github.com/thqm10/tata-steel-shift-calendar).
+Broncode, changelog en releases:
+
+`https://github.com/thqm10/tata-steel-shift-calendar`
+
+## Licentie
+
+Dit project wordt uitgebracht onder de MIT-licentie.
