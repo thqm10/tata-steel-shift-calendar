@@ -14,16 +14,30 @@ from homeassistant.helpers.selector import (
     SelectSelectorMode,
 )
 
-from .const import CONF_TEAM, DOMAIN, TEAM_COLORS, roster_title
+from .const import (
+    CONF_TEAM,
+    DOMAIN,
+    TEAM_COLORS,
+    roster_title,
+    team_display_name,
+)
 
 
-def _schema(team_color: str = "red") -> vol.Schema:
+def _schema(
+    team_color: str = "red",
+    language: str = "nl",
+) -> vol.Schema:
     """Return the configuration schema."""
+    options = sorted(
+        TEAM_COLORS,
+        key=lambda color: team_display_name(color, language).casefold(),
+    )
+
     return vol.Schema(
         {
             vol.Required(CONF_TEAM, default=team_color): SelectSelector(
                 SelectSelectorConfig(
-                    options=list(TEAM_COLORS),
+                    options=options,
                     mode=SelectSelectorMode.DROPDOWN,
                     translation_key="team_color",
                 )
@@ -50,7 +64,10 @@ class TataSteelShiftCalendarConfigFlow(config_entries.ConfigFlow, domain=DOMAIN)
                 data={CONF_TEAM: team_color},
             )
 
-        return self.async_show_form(step_id="user", data_schema=_schema())
+        return self.async_show_form(
+            step_id="user",
+            data_schema=_schema(language=self.hass.config.language),
+        )
 
     async def async_step_reconfigure(
         self,
@@ -77,5 +94,8 @@ class TataSteelShiftCalendarConfigFlow(config_entries.ConfigFlow, domain=DOMAIN)
 
         return self.async_show_form(
             step_id="reconfigure",
-            data_schema=_schema(str(entry.data[CONF_TEAM])),
+            data_schema=_schema(
+                str(entry.data[CONF_TEAM]),
+                self.hass.config.language,
+            ),
         )
