@@ -38,7 +38,7 @@ schedule = _load_module("schedule")
 def test_manifest_domain_and_version_match_constants() -> None:
     manifest = json.loads((PACKAGE_DIR / "manifest.json").read_text())
     assert manifest["domain"] == const.DOMAIN == "tata_steel_shift_calendar"
-    assert manifest["version"] == const.VERSION == "2.1.5"
+    assert manifest["version"] == const.VERSION == "2.1.6"
 
 
 def test_full_supplied_ics_period_matches_golden_digest() -> None:
