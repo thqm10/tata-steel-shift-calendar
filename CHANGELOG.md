@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.6
+
+- Ploegkleuren in de configuratie worden nu alfabetisch gesorteerd op de zichtbare vertaalde naam.
+- In het Nederlands wordt de volgorde: Blauw, Geel, Groen, Rood en Wit.
+- In het Engels wordt de volgorde automatisch alfabetisch op de Engelse kleurnamen bepaald.
+- De interne ploegwaarden en roosterberekening zijn ongewijzigd gebleven.
+
 ## 2.1.5
 
 - Kalenderentity zichtbaar hernoemd van `Rooster` naar `Agenda`.
