@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.7
+
+- Branding-afbeeldingen vervangen door versies met een hogere resolutie.
+- Verbeterde beeldkwaliteit van het integratielogo.
+- Geen wijzigingen aan de roosterberekening of functionaliteit.
+
 ## 2.1.6
 
 - Ploegkleuren in de configuratie worden nu alfabetisch gesorteerd op de zichtbare vertaalde naam.
