@@ -7,7 +7,7 @@ from typing import Final
 from zoneinfo import ZoneInfo
 
 DOMAIN: Final = "tata_steel_shift_calendar"
-VERSION: Final = "2.1.6"
+VERSION: Final = "2.1.7"
 
 CONF_TEAM: Final = "team"
 
