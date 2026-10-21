@@ -9,22 +9,9 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .const import language_code, team_display_name
+from .const import public_shift_name, team_display_name
 from .entity import TataSteelRosterEntity
 from .schedule import ShiftInfo, shift_datetimes, shift_for_date, shifts_overlapping, tata_now
-
-_SHIFT_NAMES = {
-    "nl": {
-        "morning": "Ochtenddienst",
-        "afternoon": "Middagdienst",
-        "night": "Nachtdienst",
-    },
-    "en": {
-        "morning": "Morning shift",
-        "afternoon": "Afternoon shift",
-        "night": "Night shift",
-    },
-}
 
 
 def _time_range(start: datetime, end: datetime) -> str:
@@ -57,16 +44,13 @@ class TataSteelShiftCalendar(TataSteelRosterEntity, CalendarEntity):
         if bounds is None:
             return None
         start, end = bounds
-        language = language_code(self.hass.config.language)
-        shift_name = _SHIFT_NAMES[language][info.shift]
-        team_name = team_display_name(info.team_color, language)
+        shift_name = public_shift_name(info.shift)
+        team_name = team_display_name(info.team_color)
         return CalendarEvent(
             start=start,
             end=end,
             summary=f"{shift_name} · {_time_range(start, end)}",
-            description=(
-                f"Ploeg {team_name}" if language == "nl" else f"Team {team_name}"
-            ),
+            description=f"Ploeg {team_name}",
         )
 
     def _create_event(self, day: date) -> CalendarEvent | None:
