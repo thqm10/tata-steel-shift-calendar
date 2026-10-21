@@ -38,36 +38,36 @@
       "today_shift": {
         "name": "Dienst vandaag",
         "state": {
-          "morning": "Ochtenddienst",
-          "afternoon": "Middagdienst",
-          "night": "Nachtdienst",
-          "off": "Vrij"
+          "ochtenddienst": "Ochtenddienst",
+          "middagdienst": "Middagdienst",
+          "nachtdienst": "Nachtdienst",
+          "vrij": "Vrij"
         }
       },
       "tomorrow_shift": {
         "name": "Dienst morgen",
         "state": {
-          "morning": "Ochtenddienst",
-          "afternoon": "Middagdienst",
-          "night": "Nachtdienst",
-          "off": "Vrij"
+          "ochtenddienst": "Ochtenddienst",
+          "middagdienst": "Middagdienst",
+          "nachtdienst": "Nachtdienst",
+          "vrij": "Vrij"
         }
       },
       "next_shift": {
         "name": "Volgende dienst",
         "state": {
-          "morning": "Ochtenddienst",
-          "afternoon": "Middagdienst",
-          "night": "Nachtdienst"
+          "ochtenddienst": "Ochtenddienst",
+          "middagdienst": "Middagdienst",
+          "nachtdienst": "Nachtdienst"
         }
       },
       "current_shift": {
         "name": "Huidige dienst",
         "state": {
-          "morning": "Ochtenddienst",
-          "afternoon": "Middagdienst",
-          "night": "Nachtdienst",
-          "off": "Vrij"
+          "ochtenddienst": "Ochtenddienst",
+          "middagdienst": "Middagdienst",
+          "nachtdienst": "Nachtdienst",
+          "vrij": "Vrij"
         }
       },
       "next_shift_start": {
