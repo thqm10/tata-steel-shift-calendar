@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.0
+
+- Alle gebruikersgerichte teksten en keuzelijsten zijn Nederlands.
+- Publieke dienststatussen gewijzigd van `morning`, `afternoon`, `night` en `off` naar `ochtenddienst`, `middagdienst`, `nachtdienst` en `vrij`.
+- Automatiseringen kunnen daardoor rechtstreeks Nederlandse dienststatussen gebruiken.
+- Agenda-items en ploegnamen worden altijd in het Nederlands weergegeven.
+- De interne roosterberekening blijft ongewijzigd en gebruikt intern taalneutrale waarden.
+- **Let op:** bestaande automatiseringen die nog op `morning`, `afternoon`, `night` of `off` controleren moeten worden aangepast.
+
 ## 2.1.7
 
 - Branding-afbeeldingen vervangen door versies met een hogere resolutie.
