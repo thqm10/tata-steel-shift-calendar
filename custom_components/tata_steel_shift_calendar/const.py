@@ -7,7 +7,7 @@ from typing import Final
 from zoneinfo import ZoneInfo
 
 DOMAIN: Final = "tata_steel_shift_calendar"
-VERSION: Final = "2.1.7"
+VERSION: Final = "3.0.0"
 
 CONF_TEAM: Final = "team"
 
@@ -29,20 +29,48 @@ TEAM_NAMES_NL: Final = {
     "yellow": "Geel",
     "white": "Wit",
 }
-TEAM_NAMES_EN: Final = {
-    "red": "Red",
-    "green": "Green",
-    "blue": "Blue",
-    "yellow": "Yellow",
-    "white": "White",
-}
 
+# Internal roster states. These stay language-neutral because they are part of
+# the validated calculation engine and are never exposed as public sensor states.
 SHIFT_MORNING: Final = "morning"
 SHIFT_AFTERNOON: Final = "afternoon"
 SHIFT_NIGHT: Final = "night"
 SHIFT_OFF: Final = "off"
 SHIFT_STATES: Final = (SHIFT_MORNING, SHIFT_AFTERNOON, SHIFT_NIGHT, SHIFT_OFF)
 WORK_SHIFT_STATES: Final = (SHIFT_MORNING, SHIFT_AFTERNOON, SHIFT_NIGHT)
+
+# Public Home Assistant states. These are deliberately Dutch so automations
+# never need to use English states such as "morning" or "afternoon".
+PUBLIC_SHIFT_MORNING: Final = "ochtenddienst"
+PUBLIC_SHIFT_AFTERNOON: Final = "middagdienst"
+PUBLIC_SHIFT_NIGHT: Final = "nachtdienst"
+PUBLIC_SHIFT_OFF: Final = "vrij"
+
+PUBLIC_SHIFT_STATES: Final = (
+    PUBLIC_SHIFT_MORNING,
+    PUBLIC_SHIFT_AFTERNOON,
+    PUBLIC_SHIFT_NIGHT,
+    PUBLIC_SHIFT_OFF,
+)
+WORK_SHIFT_PUBLIC_STATES: Final = (
+    PUBLIC_SHIFT_MORNING,
+    PUBLIC_SHIFT_AFTERNOON,
+    PUBLIC_SHIFT_NIGHT,
+)
+
+SHIFT_PUBLIC_STATE: Final = {
+    SHIFT_MORNING: PUBLIC_SHIFT_MORNING,
+    SHIFT_AFTERNOON: PUBLIC_SHIFT_AFTERNOON,
+    SHIFT_NIGHT: PUBLIC_SHIFT_NIGHT,
+    SHIFT_OFF: PUBLIC_SHIFT_OFF,
+}
+
+SHIFT_PUBLIC_NAME: Final = {
+    SHIFT_MORNING: "Ochtenddienst",
+    SHIFT_AFTERNOON: "Middagdienst",
+    SHIFT_NIGHT: "Nachtdienst",
+    SHIFT_OFF: "Vrij",
+}
 
 SHIFT_BY_INDEX: Final = {
     0: SHIFT_MORNING,
@@ -64,19 +92,21 @@ SHIFT_TIMES: Final = {
 }
 
 
-def language_code(language: str) -> str:
-    """Normalize a Home Assistant language code for bundled translations."""
-    return "nl" if language.lower().startswith("nl") else "en"
+def team_display_name(team_color: str, _language: str | None = None) -> str:
+    """Return the Dutch team-color display name."""
+    return TEAM_NAMES_NL[team_color]
 
 
-def team_display_name(team_color: str, language: str) -> str:
-    """Return a localized team-color display name."""
-    names = TEAM_NAMES_NL if language_code(language) == "nl" else TEAM_NAMES_EN
-    return names[team_color]
+def roster_title(team_color: str, _language: str | None = None) -> str:
+    """Return the Dutch config-entry/device title for a team color."""
+    return f"Ploegendienst rooster {team_display_name(team_color)}"
 
 
-def roster_title(team_color: str, language: str) -> str:
-    """Return the config-entry/device title for a team color."""
-    if language_code(language) == "nl":
-        return f"Ploegendienst rooster {team_display_name(team_color, language)}"
-    return f"Shift roster {team_display_name(team_color, language)}"
+def public_shift_state(shift: str) -> str:
+    """Return the Dutch public Home Assistant state for an internal shift."""
+    return SHIFT_PUBLIC_STATE[shift]
+
+
+def public_shift_name(shift: str) -> str:
+    """Return the Dutch human-readable name for an internal shift."""
+    return SHIFT_PUBLIC_NAME[shift]
