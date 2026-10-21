@@ -1,90 +1,90 @@
 {
-  "title": "Tata Steel shift calendar",
+  "title": "Tata Steel ploegendienstkalender",
   "config": {
     "step": {
       "user": {
-        "title": "Set up shift roster",
-        "description": "Choose your team color.",
+        "title": "Tata Steel ploegendienstkalender",
+        "description": "Kies je ploegkleur.",
         "data": {
-          "team": "Team color"
+          "team": "Ploegkleur"
         }
       },
       "reconfigure": {
-        "title": "Change team color",
-        "description": "Choose your team color.",
+        "title": "Ploegkleur wijzigen",
+        "description": "Kies je ploegkleur.",
         "data": {
-          "team": "Team color"
+          "team": "Ploegkleur"
         }
       }
     },
     "abort": {
-      "already_configured": "A roster has already been added for this team color.",
-      "reconfigure_successful": "The team color was updated."
+      "already_configured": "Voor deze ploegkleur is al een rooster toegevoegd.",
+      "reconfigure_successful": "De ploegkleur is bijgewerkt."
     }
   },
   "selector": {
     "team_color": {
       "options": {
-        "red": "Red",
-        "green": "Green",
-        "blue": "Blue",
-        "yellow": "Yellow",
-        "white": "White"
+        "red": "Rood",
+        "green": "Groen",
+        "blue": "Blauw",
+        "yellow": "Geel",
+        "white": "Wit"
       }
     }
   },
   "entity": {
     "sensor": {
       "today_shift": {
-        "name": "Today's shift",
+        "name": "Dienst vandaag",
         "state": {
-          "morning": "Morning shift",
-          "afternoon": "Afternoon shift",
-          "night": "Night shift",
-          "off": "Off"
+          "ochtenddienst": "Ochtenddienst",
+          "middagdienst": "Middagdienst",
+          "nachtdienst": "Nachtdienst",
+          "vrij": "Vrij"
         }
       },
       "tomorrow_shift": {
-        "name": "Tomorrow's shift",
+        "name": "Dienst morgen",
         "state": {
-          "morning": "Morning shift",
-          "afternoon": "Afternoon shift",
-          "night": "Night shift",
-          "off": "Off"
+          "ochtenddienst": "Ochtenddienst",
+          "middagdienst": "Middagdienst",
+          "nachtdienst": "Nachtdienst",
+          "vrij": "Vrij"
         }
       },
       "next_shift": {
-        "name": "Next shift",
+        "name": "Volgende dienst",
         "state": {
-          "morning": "Morning shift",
-          "afternoon": "Afternoon shift",
-          "night": "Night shift"
+          "ochtenddienst": "Ochtenddienst",
+          "middagdienst": "Middagdienst",
+          "nachtdienst": "Nachtdienst"
         }
       },
       "current_shift": {
-        "name": "Current shift",
+        "name": "Huidige dienst",
         "state": {
-          "morning": "Morning shift",
-          "afternoon": "Afternoon shift",
-          "night": "Night shift",
-          "off": "Off"
+          "ochtenddienst": "Ochtenddienst",
+          "middagdienst": "Middagdienst",
+          "nachtdienst": "Nachtdienst",
+          "vrij": "Vrij"
         }
       },
       "next_shift_start": {
-        "name": "Next shift start"
+        "name": "Start volgende dienst"
       }
     },
     "binary_sensor": {
       "working_today": {
-        "name": "Working today"
+        "name": "Werken vandaag"
       },
       "currently_working": {
-        "name": "At work"
+        "name": "Aan het werk"
       }
     },
     "calendar": {
       "calendar": {
-        "name": "Calendar"
+        "name": "Agenda"
       }
     }
   }
