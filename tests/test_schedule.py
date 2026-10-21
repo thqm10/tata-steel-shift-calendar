@@ -38,7 +38,25 @@ schedule = _load_module("schedule")
 def test_manifest_domain_and_version_match_constants() -> None:
     manifest = json.loads((PACKAGE_DIR / "manifest.json").read_text())
     assert manifest["domain"] == const.DOMAIN == "tata_steel_shift_calendar"
-    assert manifest["version"] == const.VERSION == "2.1.7"
+    assert manifest["version"] == const.VERSION == "3.0.0"
+
+
+def test_public_shift_states_are_dutch() -> None:
+    assert const.PUBLIC_SHIFT_STATES == (
+        "ochtenddienst",
+        "middagdienst",
+        "nachtdienst",
+        "vrij",
+    )
+    assert const.WORK_SHIFT_PUBLIC_STATES == (
+        "ochtenddienst",
+        "middagdienst",
+        "nachtdienst",
+    )
+    assert const.public_shift_state(const.SHIFT_MORNING) == "ochtenddienst"
+    assert const.public_shift_state(const.SHIFT_AFTERNOON) == "middagdienst"
+    assert const.public_shift_state(const.SHIFT_NIGHT) == "nachtdienst"
+    assert const.public_shift_state(const.SHIFT_OFF) == "vrij"
 
 
 def test_full_supplied_ics_period_matches_golden_digest() -> None:
@@ -146,16 +164,25 @@ def test_next_shift_and_start_refer_to_same_shift_including_later_today() -> Non
     assert end == datetime(2026, 9, 22, 22, 0, tzinfo=tz)
 
 
-def test_translations_cover_all_shift_states_and_team_colors() -> None:
+def test_translations_cover_all_public_shift_states_and_team_colors() -> None:
     for language in ("nl", "en"):
         data = json.loads((PACKAGE_DIR / "translations" / f"{language}.json").read_text())
         selector_options = data["selector"]["team_color"]["options"]
         assert set(selector_options) == set(const.TEAM_COLORS)
         for key in ("today_shift", "tomorrow_shift", "current_shift"):
-            assert set(data["entity"]["sensor"][key]["state"]) == set(const.SHIFT_STATES)
+            assert set(data["entity"]["sensor"][key]["state"]) == set(
+                const.PUBLIC_SHIFT_STATES
+            )
         assert set(data["entity"]["sensor"]["next_shift"]["state"]) == set(
-            const.WORK_SHIFT_STATES
+            const.WORK_SHIFT_PUBLIC_STATES
         )
+
+
+def test_english_translation_file_is_intentionally_dutch() -> None:
+    data = json.loads((PACKAGE_DIR / "translations" / "en.json").read_text())
+    assert data["title"] == "Tata Steel ploegendienstkalender"
+    assert data["config"]["step"]["user"]["description"] == "Kies je ploegkleur."
+    assert data["entity"]["sensor"]["today_shift"]["name"] == "Dienst vandaag"
 
 
 def test_hacs_metadata_has_minimum_home_assistant_version() -> None:
@@ -189,11 +216,12 @@ def test_no_personal_author_name_is_bundled_in_component_source() -> None:
             assert "Thom Hof" not in path.read_text()
 
 
-def test_shift_sensors_are_enum_entities_for_automation_editor() -> None:
+def test_shift_sensors_are_dutch_enum_entities_for_automation_editor() -> None:
     sensor_source = (PACKAGE_DIR / "sensor.py").read_text()
     assert "SensorDeviceClass.ENUM" in sensor_source
-    assert "_attr_options = list(SHIFT_STATES)" in sensor_source
-    assert "_attr_options = list(WORK_SHIFT_STATES)" in sensor_source
+    assert "_attr_options = list(PUBLIC_SHIFT_STATES)" in sensor_source
+    assert "_attr_options = list(WORK_SHIFT_PUBLIC_STATES)" in sensor_source
+    assert "public_shift_state" in sensor_source
 
 
 def test_automation_facing_entities_do_not_expose_extra_state_attributes() -> None:
@@ -215,6 +243,15 @@ def test_binary_automation_entities_are_kept_simple() -> None:
     assert "class WorkingTodayBinarySensor" in source
     assert "class CurrentlyWorkingBinarySensor" in source
     assert "BinarySensorDeviceClass" not in source
+
+
+def test_calendar_is_always_dutch() -> None:
+    calendar_source = (PACKAGE_DIR / "calendar.py").read_text()
+    assert "public_shift_name" in calendar_source
+    assert 'description=f"Ploeg {team_name}"' in calendar_source
+    assert "Morning shift" not in calendar_source
+    assert "Afternoon shift" not in calendar_source
+    assert "Night shift" not in calendar_source
 
 
 def test_calendar_public_name_and_object_id_use_agenda() -> None:
