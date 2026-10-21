@@ -10,10 +10,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .const import (
+    PUBLIC_SHIFT_OFF,
+    PUBLIC_SHIFT_STATES,
     SHIFT_ICONS,
-    SHIFT_OFF,
-    SHIFT_STATES,
-    WORK_SHIFT_STATES,
+    WORK_SHIFT_PUBLIC_STATES,
+    public_shift_state,
 )
 from .entity import TataSteelRosterEntity
 from .schedule import ShiftInfo, active_shift, next_upcoming_shift, shift_for_date, tata_now
@@ -40,7 +41,7 @@ class _BaseDateShiftSensor(TataSteelRosterEntity, SensorEntity):
     """Base class for date-based shift sensors."""
 
     _attr_device_class = SensorDeviceClass.ENUM
-    _attr_options = list(SHIFT_STATES)
+    _attr_options = list(PUBLIC_SHIFT_STATES)
     _date_offset = 0
     _object_id_key = "date_shift"
 
@@ -54,7 +55,7 @@ class _BaseDateShiftSensor(TataSteelRosterEntity, SensorEntity):
 
     @property
     def native_value(self) -> str:
-        return self._info().shift
+        return public_shift_state(self._info().shift)
 
     @property
     def icon(self) -> str:
@@ -90,7 +91,7 @@ class NextShiftSensor(TataSteelRosterEntity, SensorEntity):
 
     _attr_translation_key = "next_shift"
     _attr_device_class = SensorDeviceClass.ENUM
-    _attr_options = list(WORK_SHIFT_STATES)
+    _attr_options = list(WORK_SHIFT_PUBLIC_STATES)
 
     def __init__(self, entry: ConfigEntry) -> None:
         super().__init__(entry)
@@ -103,7 +104,7 @@ class NextShiftSensor(TataSteelRosterEntity, SensorEntity):
     @property
     def native_value(self) -> str:
         info, _start, _end = self._next()
-        return info.shift
+        return public_shift_state(info.shift)
 
     @property
     def icon(self) -> str:
@@ -116,7 +117,7 @@ class CurrentShiftSensor(TataSteelRosterEntity, SensorEntity):
 
     _attr_translation_key = "current_shift"
     _attr_device_class = SensorDeviceClass.ENUM
-    _attr_options = list(SHIFT_STATES)
+    _attr_options = list(PUBLIC_SHIFT_STATES)
 
     def __init__(self, entry: ConfigEntry) -> None:
         super().__init__(entry)
@@ -129,11 +130,12 @@ class CurrentShiftSensor(TataSteelRosterEntity, SensorEntity):
     @property
     def native_value(self) -> str:
         info = self._active_info()
-        return info.shift if info is not None else SHIFT_OFF
+        return public_shift_state(info.shift) if info is not None else PUBLIC_SHIFT_OFF
 
     @property
     def icon(self) -> str:
-        return SHIFT_ICONS[self.native_value]
+        info = self._active_info()
+        return SHIFT_ICONS[info.shift] if info is not None else "mdi:home-clock"
 
 
 class NextShiftStartSensor(TataSteelRosterEntity, SensorEntity):
